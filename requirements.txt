@@ -1,7 +1,7 @@
 streamlit
 ultralytics
-opencv
+opencv-python
 matplotlib
 Pillow
-numpy ==1.26.4
+numpy
 tensorflow
