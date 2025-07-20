@@ -23,7 +23,7 @@ model = loading_model()
 
 # ========== TITLE ==========
 st.markdown(
-    "<h1 style='text-align: center; color: #4B8BBE;'>Microscopic Fungus Colony Classification with CNN Resedual Network </h1>",
+    "<h1 style='text-align: center; color: #4B8BBE;'>🧫 Microscopic Fungus Colony Classification with CNN Resedual Network </h1>",
     unsafe_allow_html=True
 )
 st.markdown("<hr>", unsafe_allow_html=True)
