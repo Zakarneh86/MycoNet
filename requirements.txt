@@ -3,4 +3,4 @@ matplotlib
 Pillow
 numpy
 tensorflow
-opencv-python
+opencv-python-headless==4.9.0.80
