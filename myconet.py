@@ -5,6 +5,12 @@ from PIL import Image
 import tempfile
 from tensorflow.keras.models import load_model
 
+st.set_page_config(
+    page_title="Microscopic Fungus Colony Classifier",
+    page_icon="🧫",
+    layout="wide"
+)
+
 @st.cache_resource
 def loading_model():
     try:
@@ -14,12 +20,6 @@ def loading_model():
         print (f'Fail to Load Model. Error: {e}')
 
 model = loading_model()
-
-st.set_page_config(
-    page_title="Microscopic Fungus Colony Classifier",
-    page_icon="🧫",
-    layout="wide"
-)
 
 # ========== TITLE ==========
 st.markdown(
