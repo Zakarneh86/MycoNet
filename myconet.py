@@ -29,7 +29,7 @@ st.markdown(
 st.markdown("<hr>", unsafe_allow_html=True)
 
 # ========== SIDEBAR ==========
-st.sidebar.markdown("## 📤 Upload Your MRI")
+st.sidebar.markdown("## 📤 Upload Microscopic Image")
 uploaded_file = st.sidebar.file_uploader("Upload an image...", type=["jpg", "jpeg", "png"])
 
 if uploaded_file:
@@ -44,13 +44,13 @@ if uploaded_file:
     file_type = uploaded_file.type
     file_type = file_type.split('/')[-1]
 
-    #gray_img = cv2.cvtColor(original_img_rgb, cv2.COLOR_RGB2GRAY)
-
     img_input = original_img_rgb.astype(np.float32) / 255.0
     img_input = np.expand_dims(img_input, axis=0)
     
     results = model.predict(img_input)
     predicted_class = class_ids[results.argmax()]
+    conf = results.max()
 
-    st.write(results)
-    st.write(predicted_class)
+    st.sidebar.markdown("---")
+    st.sidebar.markdown("## 🧪 Prediction Result")
+    st.sidebar.success(f"**{predicted_class}**\nConfidence: `{conf:.2f}`")
