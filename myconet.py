@@ -44,9 +44,9 @@ if uploaded_file:
     file_type = uploaded_file.type
     file_type = file_type.split('/')[-1]
 
-    gray_img = cv2.cvtColor(original_img_rgb, cv2.COLOR_RGB2GRAY)
+    #gray_img = cv2.cvtColor(original_img_rgb, cv2.COLOR_RGB2GRAY)
 
-    img_input = gray_img.astype(np.float32) / 255.0
+    img_input = original_img_rgb.astype(np.float32) / 255.0
     img_input = np.expand_dims(img_input, axis=0)
     
     results = model.predict(img_input)
