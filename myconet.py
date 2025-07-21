@@ -20,7 +20,7 @@ def loading_model():
         st.write(f'Fail to Load Model. Error: {e}')
 
 model = loading_model()
-
+class_ids = ['H1', 'H2', 'H3', 'H5', 'H6']
 # ========== TITLE ==========
 st.markdown(
     "<h1 style='text-align: center; color: #4B8BBE;'>🧫 Microscopic Fungus Colony Classification with CNN Resedual Network </h1>",
@@ -50,5 +50,7 @@ if uploaded_file:
     img_input = np.expand_dims(img_input, axis=0)
     
     results = model.predict(img_input)
+    predicted_class = class_ids[results.argmax()]
 
     st.write(results)
+    st.write(predicted_class)
