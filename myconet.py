@@ -37,4 +37,5 @@ if uploaded_file:
     img = cv2.imdecode(file_bytes, 1)
     original_img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     file_type = uploaded_file.type
+    file_type = file_type.strip('/')[-1]
     st.write(file_type)
