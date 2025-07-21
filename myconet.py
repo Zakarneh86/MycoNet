@@ -53,4 +53,4 @@ if uploaded_file:
 
     st.sidebar.markdown("---")
     st.sidebar.markdown("## 🧪 Prediction Result")
-    st.sidebar.success(f'''Predicted Class: {predicted_class}\n Confidence: {conf:.2f}''')
+    st.sidebar.success(f"**Predicted Class:** {predicted_class}\n**Confidence:** {conf:.2f}")
