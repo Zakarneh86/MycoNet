@@ -27,3 +27,14 @@ st.markdown(
     unsafe_allow_html=True
 )
 st.markdown("<hr>", unsafe_allow_html=True)
+
+# ========== SIDEBAR ==========
+st.sidebar.markdown("## 📤 Upload Your MRI")
+uploaded_file = st.sidebar.file_uploader("Upload an image...", type=["jpg", "jpeg", "png"])
+
+if uploaded_file:
+    file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
+    img = cv2.imdecode(file_bytes, 1)
+    original_img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    file_type = uploaded_file.type
+    st.write(file_type)
