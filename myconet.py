@@ -17,7 +17,7 @@ def loading_model():
         model = load_model('./model/model4.h5')
         return model
     except Exception as e:
-        print (f'Fail to Load Model. Error: {e}')
+        st.write(f'Fail to Load Model. Error: {e}')
 
 model = loading_model()
 
