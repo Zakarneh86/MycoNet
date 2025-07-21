@@ -36,6 +36,19 @@ if uploaded_file:
     file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
     img = cv2.imdecode(file_bytes, 1)
     original_img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+    height, width, channels = original_img_rgb.shape
+    if height !=224 or width !=224:
+        original_img_rgb = cv2.resize(original_img_rgb, (224,224), interpolation=cv2.INTER_LANCZOS4)
+    
     file_type = uploaded_file.type
     file_type = file_type.split('/')[-1]
-    st.write(file_type)
+
+    gray_img = cv2.cvtColor(original_img_rgb, cv2.COLOR_RGB2GRAY)
+
+    img_input = gray_img.astype(np.float32) / 255.0
+    img_input = np.expand_dims(img_input, axis=0)
+    
+    results = model.predict(img_input)
+
+    st.write(results)
