@@ -104,7 +104,7 @@ if uploaded_file:
     with col1:
         st.image(Image.fromarray(original_img_rgb), caption="📷 Original Image")
         #st.write("Predictions:", results.numpy())
-        st.write("Loss:", results[:, class_ids])
+        st.write("Loss:", results)
     with col2:
         layer = st.selectbox("Choose a layer:", ['conv2d', 'conv2d_1', 'conv2d_2', 'conv2d_3', 'conv2d_4', 'conv2d_5', 'conv2d_8', 'conv2d_9', 'conv2d_7'])
         grad_cam_img = heatmaps[layer]
