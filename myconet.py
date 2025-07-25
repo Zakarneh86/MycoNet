@@ -19,7 +19,8 @@ def grad_cam(model, image, layer_names=['conv2d', 'conv2d_1', 'conv2d_2', 'conv2
 
         with tf.GradientTape() as tape:
             conv_outputs, predictions = grad_model(inputs)
-            loss = predictions[:, tf.argmax(predictions[0])]
+            predicted_class = tf.argmax(predictions[0])
+            loss = predictions[:, predicted_class]
 
         grads = tape.gradient(loss, conv_outputs)
         if grads is None:
