@@ -10,7 +10,6 @@ from tensorflow.keras import Model
 tf.config.run_functions_eagerly(True)
 
 def grad_cam(model, image, layer_names=['conv2d', 'conv2d_1', 'conv2d_2', 'conv2d_3', 'conv2d_4', 'conv2d_5', 'conv2d_8', 'conv2d_9', 'conv2d_7']):
-    #image = tf.convert_to_tensor(np.expand_dims(image, axis=0), dtype=tf.float32)
     image = tf.Variable(image)
     inputs = [image] if isinstance(model.input, list) else image
 
@@ -30,7 +29,7 @@ def grad_cam(model, image, layer_names=['conv2d', 'conv2d_1', 'conv2d_2', 'conv2
         if grads is None:
             heatmaps[layer_name] = None
             continue
-        print(f"Layer: {layer_name}, Gradient max: {tf.reduce_max(grads).numpy()}, min: {tf.reduce_min(grads).numpy()}")
+        #print(f"Layer: {layer_name}, Gradient max: {tf.reduce_max(grads).numpy()}, min: {tf.reduce_min(grads).numpy()}")
 
         grads = grads[0]
         pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
@@ -62,7 +61,7 @@ st.set_page_config(
 #@st.cache_resource
 def loading_model():
     try:
-        model = load_model('./model/model4.h5', compile = True)
+        model = load_model('./model/model4.h5')
         return model
     except Exception as e:
         st.write(f'Fail to Load Model. Error: {e}')
@@ -111,13 +110,16 @@ if uploaded_file:
     with col1:
         st.image(Image.fromarray(original_img_rgb), caption="📷 Original Image")
         #st.write("Predictions:", results.numpy())
-        st.write("Loss:", results)
-        intermediate_model = Model(inputs=model.inputs, outputs=model.get_layer('conv2d_8').output)
-        output = intermediate_model.predict(img_input)
-        print(output.shape, np.max(output), np.min(output))
+        #st.write("Loss:", results)
+
+    layers =[]
+    for layer in ['conv2d', 'conv2d_1', 'conv2d_2', 'conv2d_3', 'conv2d_4', 'conv2d_5', 'conv2d_8', 'conv2d_9', 'conv2d_7']:
+        grad_cam_img = heatmaps[layer]
+        if grad_cam_img is not None:
+            layers.append(layer)
 
     with col2:
-        layer = st.selectbox("Choose a layer:", ['conv2d', 'conv2d_1', 'conv2d_2', 'conv2d_3', 'conv2d_4', 'conv2d_5', 'conv2d_8', 'conv2d_9', 'conv2d_7'])
+        layer = st.selectbox("Choose a layer:", layers)
         grad_cam_img = heatmaps[layer]
 
         if grad_cam_img is not None:
@@ -130,4 +132,4 @@ if uploaded_file:
         else:
             grad_cam_display = Image.new("RGB", (original_img_rgb.shape[1], original_img_rgb.shape[0]), (0, 0, 0))
         st.image(grad_cam_display, caption="🎯 GradCAM Layer xxx")
-        st.write(grad_cam_img)
+        #st.write(grad_cam_img)
