@@ -115,3 +115,5 @@ if uploaded_file:
         st.image(Image.fromarray(original_img_rgb), caption="📷 Original Image")
     with col2:
         st.image(grad_cam_display, caption="🎯 GradCAM Layer xxx")
+        st.write(heatmap_colored)
+        st.write(grad_cam_img)
