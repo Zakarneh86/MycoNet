@@ -31,6 +31,11 @@ def grad_cam(model, image, layer_names=['conv2d', 'conv2d_1', 'conv2d_2', 'conv2
             heatmaps[layer_name] = None
             continue
         print(f"Layer: {layer_name}, Gradient max: {tf.reduce_max(grads).numpy()}, min: {tf.reduce_min(grads).numpy()}")
+
+        intermediate_model = Model(inputs=model.inputs, outputs=model.get_layer('conv2d_8').output)
+        output = intermediate_model.predict(image)
+        print(output.shape, np.max(output), np.min(output))
+
         grads = grads[0]
         pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
         conv_outputs = conv_outputs[0]
