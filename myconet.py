@@ -50,7 +50,8 @@ if uploaded_file:
     results = model.predict(img_input)
     predicted_class = class_ids[results.argmax()]
     conf = results.max()
-    st.write(results)
+    #st.write(results)
     st.sidebar.markdown("---")
     st.sidebar.markdown("## 🧪 Prediction Result")
-    st.sidebar.success(f"**Predicted Class:** {predicted_class}\n**Confidence:** {conf:.2f}")
+    st.sidebar.success(f"**Predicted Class:** {predicted_class}")
+    st.sidebar.success(f"**Confidence:** {conf:.2f}")
