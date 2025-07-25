@@ -3,7 +3,48 @@ import numpy as np
 import cv2
 from PIL import Image
 import tempfile
+import tensorflow as tf
 from tensorflow.keras.models import load_model
+from tensorflow.keras import Model
+
+def grad_cam(model, image, layer_names=['conv2d', 'conv2d_1', 'conv2d_2', 'conv2d_3', 'conv2d_4', 'conv2d_5', 'conv2d_8', 'conv2d_9', 'conv2d_7']):
+    image = np.expand_dims(image, axis=0)
+    inputs = [image] if isinstance(model.input, list) else image
+
+    heatmaps = {}
+
+    for layer_name in layer_names:
+        conv_layer = model.get_layer(layer_name)
+        grad_model = Model(inputs=model.inputs, outputs=[conv_layer.output, model.output])
+
+        with tf.GradientTape() as tape:
+            conv_outputs, predictions = grad_model(inputs)
+            loss = predictions[:, tf.argmax(predictions[0])]
+
+        grads = tape.gradient(loss, conv_outputs)
+        if grads is None:
+            heatmaps[layer_name] = None
+            continue
+
+        grads = grads[0]
+        pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
+        conv_outputs = conv_outputs[0]
+        pooled_grads = pooled_grads[..., tf.newaxis]
+
+        heatmap = tf.reduce_sum(conv_outputs * pooled_grads, axis=-1)
+        heatmap = tf.maximum(heatmap, 0)
+        heatmap_max = tf.reduce_max(heatmap)
+
+        if heatmap_max == 0:
+            heatmap = tf.zeros_like(heatmap)
+        else:
+            heatmap /= heatmap_max
+
+        heatmap_resized = cv2.resize(heatmap.numpy(), (image.shape[2], image.shape[1]))
+        heatmaps[layer_name] = heatmap_resized
+
+    return heatmaps
+
 
 st.set_page_config(
     page_title="Microscopic Fungus Colony Classifier",
@@ -55,3 +96,22 @@ if uploaded_file:
     st.sidebar.markdown("## 🧪 Prediction Result")
     st.sidebar.success(f"**Predicted Class:** {predicted_class}")
     st.sidebar.success(f"**Confidence:** {conf:.2f}")
+
+    heatmaps = grad_cam(model, original_img_rgb)
+    grad_cam_img = heatmaps['conv2d_8']
+
+    if grad_cam_img is not None:
+        # Convert to uint8 and apply colormap
+        heatmap_uint8 = np.uint8(255 * grad_cam_img)
+        heatmap_colored = cv2.applyColorMap(heatmap_uint8, cv2.COLORMAP_JET)
+        heatmap_colored = cv2.cvtColor(heatmap_colored, cv2.COLOR_BGR2RGB)  # Convert BGR to RGB for PIL
+
+        grad_cam_display = Image.fromarray(heatmap_colored)
+    else:
+        grad_cam_display = Image.new("RGB", (original_img_rgb.shape[1], original_img_rgb.shape[0]), (0, 0, 0))
+
+    col1, col2 = st.columns(2)
+    with col1:
+        st.image(Image.fromarray(original_img_rgb), caption="📷 Original Image", use_container_width=False)
+    with col2:
+        st.image(grad_cam_display, caption="🎯 GradCAM Layer xxx", use_container_width=False)
