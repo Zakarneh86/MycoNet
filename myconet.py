@@ -112,6 +112,6 @@ if uploaded_file:
 
     col1, col2 = st.columns(2)
     with col1:
-        st.image(Image.fromarray(original_img_rgb), caption="📷 Original Image", use_container_width=False)
+        st.image(Image.fromarray(original_img_rgb), caption="📷 Original Image")
     with col2:
-        st.image(grad_cam_display, caption="🎯 GradCAM Layer xxx", use_container_width=False)
+        st.image(grad_cam_display, caption="🎯 GradCAM Layer xxx")
