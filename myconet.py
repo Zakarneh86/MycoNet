@@ -32,10 +32,6 @@ def grad_cam(model, image, layer_names=['conv2d', 'conv2d_1', 'conv2d_2', 'conv2
             continue
         print(f"Layer: {layer_name}, Gradient max: {tf.reduce_max(grads).numpy()}, min: {tf.reduce_min(grads).numpy()}")
 
-        intermediate_model = Model(inputs=model.inputs, outputs=model.get_layer('conv2d_8').output)
-        output = intermediate_model.predict(image)
-        print(output.shape, np.max(output), np.min(output))
-
         grads = grads[0]
         pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
         conv_outputs = conv_outputs[0]
@@ -116,6 +112,10 @@ if uploaded_file:
         st.image(Image.fromarray(original_img_rgb), caption="📷 Original Image")
         #st.write("Predictions:", results.numpy())
         st.write("Loss:", results)
+        intermediate_model = Model(inputs=model.inputs, outputs=model.get_layer('conv2d_8').output)
+        output = intermediate_model.predict(img_input)
+        print(output.shape, np.max(output), np.min(output))
+
     with col2:
         layer = st.selectbox("Choose a layer:", ['conv2d', 'conv2d_1', 'conv2d_2', 'conv2d_3', 'conv2d_4', 'conv2d_5', 'conv2d_8', 'conv2d_9', 'conv2d_7'])
         grad_cam_img = heatmaps[layer]
