@@ -61,7 +61,7 @@ st.set_page_config(
 #@st.cache_resource
 def loading_model():
     try:
-        model = load_model('./model/model4.h5')
+        model = load_model('./model/model4.h5', compile = True)
         return model
     except Exception as e:
         st.write(f'Fail to Load Model. Error: {e}')
