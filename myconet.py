@@ -7,8 +7,10 @@ import tensorflow as tf
 from tensorflow.keras.models import load_model
 from tensorflow.keras import Model
 
+tf.config.run_functions_eagerly(True)
+
 def grad_cam(model, image, layer_names=['conv2d', 'conv2d_1', 'conv2d_2', 'conv2d_3', 'conv2d_4', 'conv2d_5', 'conv2d_8', 'conv2d_9', 'conv2d_7']):
-    image = np.expand_dims(image, axis=0)
+    image = tf.convert_to_tensor(np.expand_dims(image, axis=0), dtype=tf.float32)
     inputs = [image] if isinstance(model.input, list) else image
 
     heatmaps = {}
@@ -53,7 +55,7 @@ st.set_page_config(
     layout="wide"
 )
 
-@st.cache_resource
+#@st.cache_resource
 def loading_model():
     try:
         model = load_model('./model/model4.h5')
