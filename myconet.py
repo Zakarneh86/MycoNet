@@ -104,7 +104,7 @@ if uploaded_file:
     st.sidebar.success(f"**Predicted Class:** {predicted_class}")
     st.sidebar.success(f"**Confidence:** {conf:.2f}")
 
-    heatmaps = grad_cam(model, original_img_rgb)
+    heatmaps = grad_cam(model, img_input)
     
 
     col1, col2 = st.columns(2)
