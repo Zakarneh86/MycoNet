@@ -45,6 +45,7 @@ def grad_cam(model, image, layer_names=['conv2d', 'conv2d_1', 'conv2d_2', 'conv2
 
         heatmap_resized = cv2.resize(heatmap.numpy(), (image.shape[2], image.shape[1]))
         heatmaps[layer_name] = heatmap_resized
+        st.write(f"[DEBUG] Layer: {layer_name}, Grad max: {tf.reduce_max(grads)}, min: {tf.reduce_min(grads)}")
 
     return heatmaps
 
