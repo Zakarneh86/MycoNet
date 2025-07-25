@@ -19,14 +19,14 @@ def grad_cam(model, image, layer_names=['conv2d', 'conv2d_1', 'conv2d_2', 'conv2
 
         with tf.GradientTape() as tape:
             conv_outputs, predictions = grad_model(inputs)
-            predicted_class = tf.argmax(predictions[0])
-            loss = predictions[:, predicted_class]
+            class_index = tf.argmax(predictions[0])
+            loss = predictions[:, class_index]
 
         grads = tape.gradient(loss, conv_outputs)
         if grads is None:
             heatmaps[layer_name] = None
             continue
-
+        print(f"Layer: {layer_name}, Gradient max: {tf.reduce_max(grads).numpy()}, min: {tf.reduce_min(grads).numpy()}")
         grads = grads[0]
         pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
         conv_outputs = conv_outputs[0]
