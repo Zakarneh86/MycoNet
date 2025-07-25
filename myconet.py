@@ -11,6 +11,7 @@ tf.config.run_functions_eagerly(True)
 
 def grad_cam(model, image, layer_names=['conv2d', 'conv2d_1', 'conv2d_2', 'conv2d_3', 'conv2d_4', 'conv2d_5', 'conv2d_8', 'conv2d_9', 'conv2d_7']):
     image = tf.convert_to_tensor(np.expand_dims(image, axis=0), dtype=tf.float32)
+    image = tf.Variable(image)
     inputs = [image] if isinstance(model.input, list) else image
 
     heatmaps = {}
@@ -20,6 +21,7 @@ def grad_cam(model, image, layer_names=['conv2d', 'conv2d_1', 'conv2d_2', 'conv2
         grad_model = Model(inputs=model.inputs, outputs=[conv_layer.output, model.output])
 
         with tf.GradientTape() as tape:
+            tape.watch(image)
             conv_outputs, predictions = grad_model(inputs)
             class_index = tf.argmax(predictions[0])
             loss = predictions[:, class_index]
