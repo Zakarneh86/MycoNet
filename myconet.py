@@ -98,7 +98,7 @@ if uploaded_file:
     st.sidebar.success(f"**Confidence:** {conf:.2f}")
 
     heatmaps = grad_cam(model, original_img_rgb)
-    grad_cam_img = heatmaps['conv2d_8']
+    grad_cam_img = heatmaps['conv2d_7']
 
     if grad_cam_img is not None:
         # Convert to uint8 and apply colormap
