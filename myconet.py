@@ -104,11 +104,7 @@ if uploaded_file:
 
     heatmaps = grad_cam(model, img_input)
     
-    layers =[]
-    for layer in ['conv2d', 'conv2d_1', 'conv2d_2', 'conv2d_3', 'conv2d_4', 'conv2d_5', 'conv2d_8', 'conv2d_9', 'conv2d_7']:
-        grad_cam_img = heatmaps[layer]
-        if grad_cam_img is not None:
-            layers.append(layer)
+    available_layers = [layer for layer in heatmaps if heatmaps[layer] is not None]
 
     col1, col2 = st.columns(2)
     with col1:
@@ -117,7 +113,7 @@ if uploaded_file:
         #st.write("Loss:", results)
 
     with col2:
-        layer = st.selectbox("Choose a layer:", layers)
+        layer = st.selectbox("Choose a layer:", available_layers)
         grad_cam_img = heatmaps[layer]
 
         if grad_cam_img is not None:
