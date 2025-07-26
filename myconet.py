@@ -114,7 +114,6 @@ if uploaded_file:
         #st.write("Loss:", results)
 
     with col2:
-        layer = st.selectbox("Choose a layer:", available_layers)
         grad_cam_img = heatmaps[layer]
 
          # Convert to uint8 and apply colormap
