@@ -106,11 +106,12 @@ if uploaded_file:
     
     available_layers = [layer for layer in heatmaps if heatmaps[layer].sum() != 0.0]
     #layer = st.selectbox("Choose a layer:", available_layers)
+    st.markdown("### Select GradCAM Layer")
     layer = st.radio("", available_layers, horizontal=True)
 
     col1, col2 = st.columns(2)
     with col1:
-        st.image(Image.fromarray(original_img_rgb), caption="📷 Original Image")
+        st.image(Image.fromarray(original_img_rgb), caption="📷 Original Image", use_column_width=True)
         #st.write("Predictions:", results.numpy())
         #st.write("Loss:", results)
 
@@ -121,6 +122,6 @@ if uploaded_file:
         heatmap_uint8 = np.uint8(255 * grad_cam_img)
         heatmap_colored = cv2.applyColorMap(heatmap_uint8, cv2.COLORMAP_JET)
         heatmap_colored = cv2.cvtColor(heatmap_colored, cv2.COLOR_BGR2RGB)  # Convert BGR to RGB for PIL
-        st.image(Image.fromarray(heatmap_colored), caption = f"🎯 GradCAM Layer {layer}")
+        st.image(Image.fromarray(heatmap_colored), caption = f"🎯 GradCAM Layer {layer}", use_column_width=True)
 
 
