@@ -126,4 +126,4 @@ if uploaded_file:
         else:
             grad_cam_display = Image.new("RGB", (original_img_rgb.shape[1], original_img_rgb.shape[0]), (0, 0, 0))
         st.image(grad_cam_display, caption="🎯 GradCAM Layer xxx")
-        st.write(grad_cam_img)
+        #st.write(grad_cam_img)
