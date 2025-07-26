@@ -104,7 +104,7 @@ if uploaded_file:
 
     heatmaps = grad_cam(model, img_input)
     
-    available_layers = [layer for layer in heatmaps if heatmaps[layer] is not None]
+    available_layers = [layer for layer in heatmaps if heatmaps[layer].sum() != 0.0]
 
     col1, col2 = st.columns(2)
     with col1:
@@ -126,4 +126,4 @@ if uploaded_file:
         else:
             grad_cam_display = Image.new("RGB", (original_img_rgb.shape[1], original_img_rgb.shape[0]), (0, 0, 0))
         st.image(grad_cam_display, caption="🎯 GradCAM Layer xxx")
-        #st.write(grad_cam_img)
+        st.write(grad_cam_img)
