@@ -106,7 +106,7 @@ if uploaded_file:
     
     available_layers = [layer for layer in heatmaps if heatmaps[layer].sum() != 0.0]
 
-    col1, col2 = st.columns(2)
+    col1, col2 = st.columns(3)
     with col1:
         st.image(Image.fromarray(original_img_rgb), caption="📷 Original Image")
         #st.write("Predictions:", results.numpy())
@@ -116,14 +116,9 @@ if uploaded_file:
         layer = st.selectbox("Choose a layer:", available_layers)
         grad_cam_img = heatmaps[layer]
 
-        if grad_cam_img is not None:
-        # Convert to uint8 and apply colormap
-            heatmap_uint8 = np.uint8(255 * grad_cam_img)
-            heatmap_colored = cv2.applyColorMap(heatmap_uint8, cv2.COLORMAP_JET)
-            heatmap_colored = cv2.cvtColor(heatmap_colored, cv2.COLOR_BGR2RGB)  # Convert BGR to RGB for PIL
+         # Convert to uint8 and apply colormap
+        heatmap_uint8 = np.uint8(255 * grad_cam_img)
+        heatmap_colored = cv2.applyColorMap(heatmap_uint8, cv2.COLORMAP_JET)
+        heatmap_colored = cv2.cvtColor(heatmap_colored, cv2.COLOR_BGR2RGB)  # Convert BGR to RGB for PIL
 
-            grad_cam_display = Image.fromarray(heatmap_colored)
-        else:
-            grad_cam_display = Image.new("RGB", (original_img_rgb.shape[1], original_img_rgb.shape[0]), (0, 0, 0))
-        st.image(grad_cam_display, caption="🎯 GradCAM Layer xxx")
-        #st.write(grad_cam_img)
+        grad_cam_display = Image.fromarray(heatmap_colored)
